@@ -22,12 +22,12 @@ tags:
 - **Retrocomputing with Clash: Haskell for FPGA Hardware Design** by Gergo Erdi
 - **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 - **Computer Systems: An Integrated Approach to Arch and OS** by Ramachandran and Leahy
-- **Designing Data-Intensive Applications** by Martin Kleppmann
 
 ## Done
 
 ### 2024
 
+- **Designing Data-Intensive Applications** by Martin Kleppmann
 - **Getting Started with FPGAs** by Russell Merrick
 - **Rust for Rusteceans** by Jon Gjengset
 - **100 Go Mistakes and How to Avoid Them** by Teiva Harsanyi
