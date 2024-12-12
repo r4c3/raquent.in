@@ -5,10 +5,9 @@ title: Welcome
 I'm Race, a CS undergrad from Georgia Tech working on wares of varying hardness.
 
 You may find interest in:
-  - my [[posts]],
+  - my blog-like [[posts]],
   - some [[notes]] on math and computer science,
-  - a list of [[posts/the-booklist|books I'm reading]],
-  - or a list of [[posts/notably-good-software|software recommendations]].
+  - or my summarized [[posts/the-booklist|reading list]].
 
 Current work priority queue:
   - [high-frequency trading on FPGAs via Haskell](https://github.com/raquentin/punt-engine),

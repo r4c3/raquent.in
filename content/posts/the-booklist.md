@@ -1,32 +1,35 @@
 ---
 title: The booklist
 date: 2024-03-24
-tags:
-  - swe
-  - cs
 ---
+The shoulders of the giants I stand on.
 
 ## Backlog
-- **TCP/IP Illustrated: The Protocols** by Kevin Fall and W. Stevens
-- **Linux Kernel Development** by Robert Love
-- **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
-- **The Theory of Computation** by Michael Sipser
 - **Category Theory for Programmers** by Bartosz Milewski
 - **Practical SQL** by Anthony DeBarros
-- **The Book of Kubernetes** by Alan Hohn
 - **Static Program Analysis** by Andres Møller and Michael Schwartzbach
+- **Logical Foundations** by Benjamin Pierce and thirty-two others
+- **Linear Algebra Done Right** by Sheldon Axler
+- **Parallel Programming for FPGAs** by Ryan Kastner, Janarbek Matai, and Stephen Neuendorffer
+- **Engineering a Compiler** by Keith Cooper and Linda Torczon
+- **Introduction to Probability and Statistics for Engineers and Scientists** by Sheldon Ross
+- **Compiler Optimizations for Scalable Parallel Systems** by Santosh Pande and Dharma Agrawal
+
 
 ## In progress
-- **Logical Foundations** by Benjamin Pierce and thirty-two others
-- **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
-- **Retrocomputing with Clash: Haskell for FPGA Hardware Design** by Gergo Erdi
+- **Linux Kernel Development** by Robert Love
+- **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
+- **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
 - **Parallel and Concurrent Programming in Haskell** by Simon Marlow
-- **Computer Systems: An Integrated Approach to Arch and OS** by Ramachandran and Leahy
 
 ## Done
 
 ### 2024
 
+- **The Book of Kubernetes** by Alan Hohn
+- **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
+- **Advanced Digital Design with the Verilog HDL** by Michael Ciletti
+- **Computer Systems: An Integrated Approach to Arch and OS** by Ramachandran and Leahy
 - **Designing Data-Intensive Applications** by Martin Kleppmann
 - **Getting Started with FPGAs** by Russell Merrick
 - **Rust for Rusteceans** by Jon Gjengset
