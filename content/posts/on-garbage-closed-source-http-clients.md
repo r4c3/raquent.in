@@ -2,9 +2,7 @@
 title: "On garbage closed-source HTTP clients"
 date: 2024-08-19
 tags:
-  - sw
   - cpp
-  - http
 ---
 
 Much of the greatest software ever written is the product of earlier closed-source alternatives being trash. We have:

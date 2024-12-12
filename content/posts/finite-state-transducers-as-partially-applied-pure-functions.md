@@ -5,108 +5,136 @@ tags:
   - haskell
   - automata
   - fpga
-  - hft
 ---
 
 Software is great, but sometimes life is too short to write programs bound by pipelined processors, one-size-fits-all arithmetic units, and network cards.
 
-High-frequency trading systems exemplify this. When counting latency in nanoseconds, every clock cycle matters. This is why trading applications like [punt-engine](https://github.com/raquentin/punt-engine) are implemented in hardware description languages (HDLs) that "compile" to configurations of registers and digital logic, unlike traditional programming languages that instruct pre-built processors.
+High-frequency trading systems exemplify this. When counting latency in nanoseconds, every clock cycle matters. This is why trading applications like [punt-engine](https://github.com/raquentin/punt-engine) are implemented in hardware description languages (HDLs) that compile[^1] to configurations of registers and digital logic, unlike traditional programming languages that instruct pre-built processors.
 
-This post is primarily a resource for new punt-engine contributors to see first-hand how we describe hardware using a functional (as in pure and declarative, not just "working") HDL. Others can find a quite beautiful application of a typed lambda calculus to map input wires to output wires in described circuits, producing faster applications than would be in C[^1] $\implies$ Haskell is faster than C (╯°□°)╯︵ ┻━┻.
+This post is primarily a resource for new punt-engine contributors to see first-hand how we describe hardware using a functional (as in pure and declarative, not just "working") HDL. Others can find a quite beautiful application of a typed lambda calculus to map input wires to output wires in described circuits, producing faster applications than would be in C[^2] $\implies$ Haskell is faster than C (╯°□°)╯︵ ┻━┻.
 
 ## Finite state machines
 
 Finite state machines (FSMs) model computation by defining a finite set of program states, an initial state, and a function deriving state transitions from inputs. Transducers are a class of state machines often used to control applications. There's two distinct types: Moore machines and Mealy machines.
 
-## Moore machine
+### Introducing our example
 
-In a Moore machine, outputs are determined solely by the current state. Outputs only change when state changes, irrespective of the input.
+To illustrate the differences between Moore and Mealy machines, we'll implement both using [Clash](https://clash-lang.org), a functional HDL implemented as a subset of Haskell. Our example will focus on detecting rising edges (transitions from 0 to 1) in a bitstream:
+- Moore: Outputs 1 one clock cycle after detecting a rising edge.
+- Mealy: Outputs 1 immediately upon detecting a rising edge.
 
-Consider a trivial traffic light controller with three states: red, green, and yellow. The output (the color displayed on the light) depends only on the state. Each clock cycle, the traffic light switches to the next state in a loop (Red -> Green -> Yellow -> Red ...).
+We'll simulate both implementations to see how the different machines respond to the input.
 
-We can implement this FSM in hardware using a semantic subset of Haskell via [Clash](https://clash-lang.org).
+### Boilerplate code
+
+Before getting into the specifics of the implementations of the machines, let's set up some boilerplate. Since we're solving the same problem in two different ways, we'll be using the same language pragmas, test input, and simulation function. Below is some generic boilerplate I produced by removing the word "moore" or "mealy" in shared code between my two circuits and just replacing it with "fsm". Do the inverse to create runable code.
 
 ```haskell
--- enable some language pragmas (compiler options) that provide some convenience for using our types
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
--- import Clash's fns and types for hardware synthesis
+module FSM where
+
 import Clash.Prelude
+import Prelude qualified as P
 
--- define the states: Red, Green, or Yellow
-data TrafficState = Red | Green | Yellow deriving (Eq, Show, Enum)
+-- <define machine state types here>
 
--- define the output type
--- Signals are like wires, they represent values over time
-type TrafficOutput = Signal System TrafficState
+-- <define state transition & output function(s)>
 
--- implement our Moore machine
--- H.C.R.E. dom abstracts away Clock, Reset, and Enable signals into a clock domain called "dom"
--- the trafficMoore function takes two parameters:
---    TrafficState, a current state
---    dom, which wraps Clock and Reset.
--- we return a TrafficOutput, defined as a Signal holding our TrafficState
-trafficMoore :: HiddenClockResetEnable dom => TrafficState -> Signal dom () -> TrafficOutput
-trafficMoore initial input = moore transition outputLogic initial input
-  where
-    -- transition function: cycles through Red -> Green -> Yellow -> Red ...
-    transition :: TrafficState -> () -> TrafficState
-    transition Red _    = Green
-    transition Green _  = Yellow
-    transition Yellow _ = Red
+-- define simulation function
+-- why P.take 20? circuits hold values indefinetly
+--     let's just consider the first 20 samples of our output
+simulateFSM :: [Bit] -> [Bit]
+simulateFSM inp = P.take 20 $ simulate (fsmMachine @System) (inp P.++ P.repeat 0)
 
-    -- output logic: output the current state
-    outputLogic :: TrafficState -> TrafficState
-    outputLogic state = state
-
--- define topEntity for synthesis, it's like main() in C
-topEntity :: TrafficOutput
-topEntity = trafficMoore Red (pure ())
+-- top entity for synthesis
+-- HiddenClockResetEnable abstracts handling with clock, reset, and wren into compiler magic
+--    We define a clock domain `dom`. Our input and output wires hold Bits in this domain.
+topEntity :: (HiddenClockResetEnable dom) => Signal dom Bit -> Signal dom Bit
+topEntity = fsmMachine
 ```
 
-This implementation has syntax likely foreign to imperative programmers. I try explaining most of it in the comments, but you can see Philipp Hagenlocher's playlist [Haskell for Imperative Programmers](https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV) for a more comprehensive guide.
+With this out of the way, we've reduced the problem to implementing state machine types, a state transition function, and an output function.
 
-## Mealy machine
+### Moore machine
+
+In a Moore machine, outputs are determined solely by the current state. Outputs only change when state changes, irrespective of the input. Consequently, there's a one-clock-cycle delay between an input change and the corresponding output change.
+
+We can implement a Moore FSM to detect rising edges[^3]:
+
+```haskell
+data MooreState = Idle | RisingDetected
+  deriving (Show, Eq, Generic, NFDataX)
+
+mooreTransition :: MooreState -> Bit -> MooreState
+mooreTransition s input =
+  case s of
+    Idle -> if input == 1 then RisingDetected else Idle
+    RisingDetected -> Idle -- return to Idle on next cycle
+
+-- output function based solely on the current state
+mooreOutput :: MooreState -> Bit
+mooreOutput s =
+  case s of
+    Idle -> 0
+    RisingDetected -> 1
+
+mooreMachine ::
+  (HiddenClockResetEnable dom) =>
+  Signal dom Bit ->
+  Signal dom Bit
+mooreMachine = moore mooreTransition mooreOutput Idle
+```
+
+We can use `clashi`, a Clash repl, to compile our file and call its members. Running the simulation gives us this output:
+```haskell
+ghci> :l MooreFSM
+ghci> simulateMoore [0, 0, 1, 1, 0, 1, 0, 0] :: [Bit]
+[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]
+```
+Recall that `simulateMoore` is a de-generalization of the boilerplate simulation function. You can see in the output that our circuit's detection of the rising edge is delayed by one clock cycle. Since the Moore machine's output is purely based on its state, we spend the first clock cycle updating the state based on the input, and the second one outputting it.
+
+Let's consider a different design that does both of these steps at once.
+
+### Mealy machine
 
 In contrast with Moore machines, Mealy machines derive outputs from both the current state and the current inputs.
 
-Consider an accumulator FSM that performs the operation $\text{acc} = \text{acc} + x * y$.
-
-![[acc-fsm.png]]
-
-This FSM maintains an accumulator `acc` that sums the product of its input pair `(x, y)` each clock cycle.
-
-Let's implement this machine in hardware using Clash as well:
+Consider the same circuit that uses a Mealy machine to react to a rising edge immediately based on the input, instead of updating the state on this cycle and the output on the next one like the Moore one did. You'll find that this circuit appears to be a clock cycle ahead:
 
 ```haskell
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+data MealyState = MIdle
+  deriving (Show, Eq, Generic, NFDataX)
 
--- import Clash's functions and types for hardware synthesis
-import Clash.Prelude
+-- when we encounter a rising edge, immediately output 1; else 0.
+-- the state here is simple; we can keep track of the previous input.
+type MealyInternalState = (MealyState, Bit)
 
--- define the state type, our accumulator is an Int
-type AccState = Int
+mealyTransitionOutput :: MealyInternalState -> Bit -> (MealyInternalState, Bit)
+mealyTransitionOutput (s, prevInput) currentInput =
+  let out = if prevInput == 0 && currentInput == 1 then 1 else 0
+      nextState = (s, currentInput)
+   in (nextState, out)
 
--- define the output type
-type AccOutput = Signal System Int
-
--- implement our Mealy machine
-accumulatorMealy :: HiddenClockResetEnable dom => Signal dom (Int, Int) -> AccOutput
-accumulatorMealy = mealy transition 0
-  where
-    -- Transition function: updates the accumulator with acc + x * y
-    -- vars in Haskell are immutable, so we use acc'
-    transition :: AccState -> (Int, Int) -> (AccState, Int)
-    transition acc (x, y) = let acc' = acc + x * y
-                            in (acc', acc')
-
--- define topEntity for synthesis
-topEntity :: Clock System -> Reset System -> Enable System -> Signal System (Int, Int) -> Signal System Int
-topEntity = exposeClockResetEnable accumulatorMealy
+mealyMachine ::
+  (HiddenClockResetEnable dom) =>
+  Signal dom Bit ->
+  Signal dom Bit
+mealyMachine = mealy mealyTransitionOutput (MIdle, 0)
 ```
+
+Run the simulation function:
+```haskell
+ghci> :l MealyFSM
+ghci> simulateMealy [0, 0, 1, 1, 0, 1, 0, 0] :: [Bit]
+[0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+```
+
+Our Mealy machine outputs the rising edge in the input as soon as it is recieved.
 
 ### :t mealy
 
@@ -126,33 +154,27 @@ This is a bit of a daunting type signature, but it makes sense when you consider
 > In contrast with Moore machines, Mealy machines derive outputs from both the current state and the current inputs.
 
 Running a Mealy machine requires three things:
-- a state transition function. This function maps a current state and the machine's inputs to the next state and its outputs. In our example, this function is $f(\text{acc}, x, y) = \text{acc} + x * y = \text{acc'}$. This maps perfectly to the type signature `(s -> i -> (s, o))`. Our current state of type `s` is $\text{acc}$, our input of type `i` is a tuple $(x, y)$, and our output of `o` and our next state of `s` are both $\text{acc'}$.
-- an initial state. We can't inductively say $\text{acc'} = \text{acc} + x * y$ if $\text{acc}$ is never initially defined. This is the second parameter to the `mealy` fn.
-- an input wire. This wire holds the $(x, y)$ tuple, the input to our machine. It's the third and final parameter to `mealy`.
+- a state transition function. That's the point of a state machine, after all.
+- an initial state. In our case, this is `(MIdle, 0)`. We start in the Idle state, and we want to output a rising edge if the input starts with 1.
+- an input wire. Our function needs an input to produce outputs, or in other words, our circuit needs an input wire to assert an output wire.
 
 With these three parameters, we produce one output: a wire holding the value of the accumulator after performing our operation. This is the last entry in the chain of `->` in our type signature: `Signal dom o`.
 
 With the type signature understood, consider how we call `mealy` in our code:
 
 ```haskell
-accumulatorMealy = mealy transition 0
+mealyMachine = mealy mealyTransitionOutput (MIdle, 0)
 ```
 
-We've called `mealy` with two parameters, yet `mealy` expects three. By supplying just two parameters, we've performed [[partial-function-application|partial function application]] to construct `accumulatorMealy`, a function that takes in an input wire `Signal dom i` and returns `Signal dom o`.
-
-With that, we can use the topEntity function to connect conceptual wires to our `accumulatorMealy` function to build a circuit:
-
-```haskell
-topEntity :: Clock System -> Reset System -> Enable System -> Signal System (Int, Int) -> Signal System Int
-topEntity = exposeClockResetEnable accumulatorMealy
-```
-
-Clash compiles this to Verilog, and we can use synthesis software like AMD's Xilinx to program an FPGA with it.
+We've called `mealy` with two parameters, yet `mealy` expects three. By supplying just two parameters, we've performed [[partial-function-application|partial function application]] to construct `mealyMachine`, a function that takes in an input wire `Signal dom Bit` as input and outputs a different `Signal dom Bit`.
 
 ## Conclusion
 
-We've explored how finite-state transducers (Moore and Mealy machines) can be elegantly implemented in Haskell and Clash.
+We've compared finite-state transducers (Moore and Mealy machines) via their implementations of a trivial rising-edge-detector circuit in Haskell and Clash.
 
 The punt-engine project uses this paradigm to synthesize various cores in our FPGA-accelerated trading engine. For more info on our project, see our [GitHub](https://github.com/raquentin/punt-engine).
 
-[^1]: Or perhaps, more specifically parallelized.
+[^1]: Clash transforms Haskell to VHDL, Verilog, or SystemVerilog; "transpile" is likely a better word here.
+[^2]: Or perhaps, more specifically parallelized.
+[^3]: This implementation has syntax likely foreign to imperative programmers. I try explaining most of it in the comments, but you can see Philipp Hagenlocher's playlist [Haskell for Imperative Programmers](https://www.youtube.com/playlist?list=PLe7Ei6viL6jGp1Rfu0dil1JH1SHk9bgDV) for a more comprehensive guide.
+
