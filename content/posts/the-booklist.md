@@ -26,14 +26,14 @@ The shoulders of the giants I stand on.
 ### 2025
 
 - **Linux Kernel Development** by Robert Love
+- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 
 ### 2024
 
 - **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
 - **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
-- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
-- **The Book of Kubernetes** by Alan Hohn
 - **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
+- **The Book of Kubernetes** by Alan Hohn
 - **Advanced Digital Design with the Verilog HDL** by Michael Ciletti
 - **Computer Systems: An Integrated Approach to Arch and OS** by Ramachandran and Leahy
 - **Designing Data-Intensive Applications** by Martin Kleppmann
