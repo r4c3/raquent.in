@@ -9,23 +9,29 @@ The shoulders of the giants I stand on.
 - **Practical SQL** by Anthony DeBarros
 - **Static Program Analysis** by Andres Møller and Michael Schwartzbach
 - **Logical Foundations** by Benjamin Pierce and thirty-two others
+- **Compiler Optimizations for Scalable Parallel Systems** by Santosh Pande and Dharma Agrawal
+- **TCP/IP Illustrated** by W. Richard Stevens
+- **C++ Concurrency in Action** by Anthony Williams
+
+
+## In progress
+
 - **Linear Algebra Done Right** by Sheldon Axler
 - **Parallel Programming for FPGAs** by Ryan Kastner, Janarbek Matai, and Stephen Neuendorffer
 - **Engineering a Compiler** by Keith Cooper and Linda Torczon
 - **Introduction to Probability and Statistics for Engineers and Scientists** by Sheldon Ross
-- **Compiler Optimizations for Scalable Parallel Systems** by Santosh Pande and Dharma Agrawal
-
-
-## In progress
-- **Linux Kernel Development** by Robert Love
-- **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
-- **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
-- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 
 ## Done
 
+### 2025
+
+- **Linux Kernel Development** by Robert Love
+
 ### 2024
 
+- **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
+- **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
+- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 - **The Book of Kubernetes** by Alan Hohn
 - **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
 - **Advanced Digital Design with the Verilog HDL** by Michael Ciletti
