@@ -24,9 +24,14 @@ The shoulders of the giants I stand on.
 - **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 - **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
 - **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
-- **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
 
 ## Done
+
+### 2025
+
+- **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
+
+### 2024
 
 - **The Book of Kubernetes** by Alan Hohn
 - **Advanced Digital Design with the Verilog HDL** by Michael Ciletti
