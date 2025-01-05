@@ -16,14 +16,13 @@ The shoulders of the giants I stand on.
 
 ## In progress
 
-- **Linear Algebra Done Right** by Sheldon Axler
 - **Parallel Programming for FPGAs** by Ryan Kastner, Janarbek Matai, and Stephen Neuendorffer
 - **Engineering a Compiler** by Keith Cooper and Linda Torczon
 - **Introduction to Probability and Statistics for Engineers and Scientists** by Sheldon Ross
 - **Linux Kernel Development** by Robert Love
 - **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 - **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
-- **Interactive Linear Algebra** by Dan Margalit and Joseph Rabinoff
+- **Introduction to Linear Algebra** by Gilbert Strang
 
 ## Done
 
