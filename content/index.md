@@ -13,7 +13,6 @@ Current work pq:
   - [a domain-specific language backended by cURL](https://github.com/raquentin/raquest),
   - [algorithmic trading on FPGAs with Haskell](https://github.com/raquentin/punt-engine),
   - [the Gleam language and related libraries](https://github.com/gleam-lang/gleam),
-  - [изучением русского языка](https://www.linkedin.com/feed/update/urn:li:activity:7155095488885624832/),
-  - and an unimpressive [Codeforces](https://codeforces.com/profile/raquentin) elo push.
+  - [и изучением русского языка](https://www.linkedin.com/feed/update/urn:li:activity:7155095488885624832/).
 
 For questions, contact race@raquent.in.

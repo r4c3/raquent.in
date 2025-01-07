@@ -5,7 +5,7 @@ date: 2024-03-24
 The shoulders of the giants I stand on.
 
 ## Backlog
-- **Category Theory for Programmers** by Bartosz Milewski
+- **Category Theory** by Steve Awodey
 - **Practical SQL** by Anthony DeBarros
 - **Static Program Analysis** by Andres Møller and Michael Schwartzbach
 - **Logical Foundations** by Benjamin Pierce and thirty-two others
@@ -16,7 +16,6 @@ The shoulders of the giants I stand on.
 
 ## In progress
 
-- **Parallel Programming for FPGAs** by Ryan Kastner, Janarbek Matai, and Stephen Neuendorffer
 - **Engineering a Compiler** by Keith Cooper and Linda Torczon
 - **Introduction to Probability and Statistics for Engineers and Scientists** by Sheldon Ross
 - **Linux Kernel Development** by Robert Love
@@ -28,6 +27,7 @@ The shoulders of the giants I stand on.
 
 ### 2025
 
+- **Principles and Structures of FPGAs** by Hideharu Amano
 - **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
 
 ### 2024
