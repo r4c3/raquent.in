@@ -2,7 +2,7 @@
 title: Hi
 ---
 
-My name is Race Williams. I'm a third-year CS undergrad at Georgia Tech. I like computer architecture, programming languages, spoken languages, and poker.
+My name is Race Williams. I'm a third-year CS undergrad at Georgia Tech.
 
 You may find interest in:
   - my blog-like [[posts]],
