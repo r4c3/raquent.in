@@ -12,6 +12,7 @@ The shoulders of the giants I stand on.
 - **Compiler Optimizations for Scalable Parallel Systems** by Santosh Pande and Dharma Agrawal
 - **TCP/IP Illustrated** by W. Richard Stevens
 - **C++ Concurrency in Action** by Anthony Williams
+- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 
 
 ## In progress
@@ -19,7 +20,6 @@ The shoulders of the giants I stand on.
 - **Engineering a Compiler** by Keith Cooper and Linda Torczon
 - **Introduction to Probability and Statistics for Engineers and Scientists** by Sheldon Ross
 - **Linux Kernel Development** by Robert Love
-- **Parallel and Concurrent Programming in Haskell** by Simon Marlow
 - **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
 - **Introduction to Linear Algebra** by Gilbert Strang
 - **Pearls of Functional Algorithm Design** by Richard Bird
