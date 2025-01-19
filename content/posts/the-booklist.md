@@ -29,6 +29,7 @@ The shoulders of the giants I stand on.
 
 ### 2025
 
+- **xv6: a simple, Unix-like teaching operating system** by Russ Cox, Frans Kaashoek, Robert Morris
 - **Principles and Structures of FPGAs** by Hideharu Amano
 - **Haskell Programming from First Principles** by Christopher Allen and Julie Moronuki
 
