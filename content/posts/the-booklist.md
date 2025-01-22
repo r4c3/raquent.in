@@ -13,6 +13,7 @@ The shoulders of the giants I stand on.
 - **TCP/IP Illustrated** by W. Richard Stevens
 - **C++ Concurrency in Action** by Anthony Williams
 - **Parallel and Concurrent Programming in Haskell** by Simon Marlow
+- **Parallel Programming for FPGAs** by Ryan Kastner, Janarbek Matai, and Stephen Neuendorffer
 
 
 ## In progress
