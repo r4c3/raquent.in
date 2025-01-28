@@ -24,6 +24,8 @@ The shoulders of the giants I stand on.
 - **Operating Systems: Three Easy Pieces** by Andrea and Remzi Arpaci-Dusseau
 - **Introduction to Linear Algebra** by Gilbert Strang
 - **Pearls of Functional Algorithm Design** by Richard Bird
+- **The Little Book of Semaphores** by Allen Downey
+- **Retrocomputing with Clash** by Gergo Erdi
 
 ## Done
 
